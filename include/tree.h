@@ -1,55 +1,54 @@
-// Copyright 2022 NNTU-CS 
-#ifndef INCLUDE_TREE_H_ 
-#define INCLUDE_TREE_H_ 
-#include <iostream> 
-#include <vector> 
+// Copyright 2022 NNTU-CS
+#ifndef INCLUDE_TREE_H_
+#define INCLUDE_TREE_H_
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+struct Node {
+    bool Root = false;
+    char value;
+    std::vector<Node*> pointers;
+};
+
 class Tree {
  private:
-    struct Node {
-        char value;
-        std::vector<Node*> pointers{};
-        explicit Node(char value) : value(value) {}
-    };
-
-    Node* addNode(Node* root, std::vector<char> vectorChar) {
-        if (nullptr == root) {
-            root = new Node('x');
-            numberOfElements = vectorChar.size();
+    Node* root;
+    std::vector<std::vector<char>> temp;
+    void searchPerms(Node* root, std::vector<char> vector) {
+        if (!root->Root)
+            vector.push_back(root->vlaue);
+        if (root->pointers.empty()) {
+            temp.push_back(vector);
+        } else {
+            for (Node* child : root->pointers) {
+                searchPerms(child, vector);
+            }
         }
-        for (int i = 0; i < vectorChar.size(); i++) {
-            Node* child = new Node(vectorChar[i]);
-            root->pointers.push_back(child);
-
-            std::vector<char> temp = vectorChar;
-            temp.erase(temp.begin() + i);
-            addNode(child, temp);
+    }
+    
+    void addNode(Node* root, const std::vector<char>& vector) {
+        for (char c : vector) {
+            Node* tmp = new Node;
+            tmp->value = c;
+            root->pointers.push_back(tmp);
+            std::vector<char> remainingChars(vector);
+            remainingChars.erase(std::find(remainingChars.begin(), \
+                remainingChars.end(), c));
+            addNode(tmp, remainingChars);
         }
-        return root;
     }
 
  public:
-    Node* root;
-    int numberOfElements;
-    explicit Tree(std::vector<char> vector) : numberOfElements(0) {
-        root = addNode(root, vector);
+    explicit Tree(const std::vector<char>& vector) {
+        root = new Node;
+        root->Root = true;
+        addNode(root, vector);
+        std::vector<char> current;
+        searchPerms(root, current);
     }
-
-    int Fact(int n) const {
-        int result = 1;
-        for (int i = 1; i <= n; i++) {
-            result *= i;
-        }
-        return result;
-    }
-
-    std::vector<char> getPermutation(Node* node, int n, int localNumberOfElements, std::vector<char> vector) const {
-        if (localNumberOfElements == 0) {
-            return vector;
-        }
-        Node* tempNode = node->pointers[(n - 1) / (Fact(localNumberOfElements) / localNumberOfElements) % localNumberOfElements];
-        vector.push_back(tempNode->value);
-        int newNumber = localNumberOfElements - 1;
-        return getPermutation(tempNode, n, newNumber, vector);
+    std::vector<std::vector<char>> getPermutations() const {
+        return perms;
     }
 };
 #endif  // INCLUDE_TREE_H_
