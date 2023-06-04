@@ -8,7 +8,7 @@ class Tree {
     struct Node {
         char value;
         std::vector<Node*> pointers {};
-        Node(char value): value(value) {}
+        explicit Node(char value): value(value) {}
     };
 
     Node* addNode(Node* root, std::vector<char> vectorChar) {
@@ -30,7 +30,7 @@ class Tree {
  public:
     Node* root;
     int numberOfElements;
-    Tree(std::vector<char> vector) {
+    explicit Tree(std::vector<char> vector) {
         root = addNode(root, vector);
     }
 
@@ -42,12 +42,14 @@ class Tree {
         return result;
     }
 
-    std::vector<char> getPermutation(Node* node, int n, int localNumberOfElements, std::vector<char> vector) const {
+    std::vector<char> getPermutation(Node* node, int n, int localNumberOfElements,
+                                     std::vector<char> vector) const {
         if (localNumberOfElements == 0) {
             return vector;
         }
-      
-        Node* tempNode = node->pointers[(n - 1) / (Fact(localNumberOfElements) / localNumberOfElements) % localNumberOfElements];
+        Node* tempNode = node->pointers[(n - 1) / (Fact(localNumberOfElements)
+                                                   / localNumberOfElements)
+                                        % localNumberOfElements];
         vector.push_back(tempNode->value);
         int newNumber = localNumberOfElements - 1;
         return getPermutation(tempNode, n, newNumber, vector);
