@@ -42,7 +42,8 @@ class Tree {
         return result;
     }
 
-    std::vector<char> getPermutation(Node* node, int n, int localNumberOfElements,
+    std::vector<char> getPermutation(Node* node, int n,
+                                     int localNumberOfElements,
                                      std::vector<char> vector) const {
         if (localNumberOfElements == 0) {
             return vector;
