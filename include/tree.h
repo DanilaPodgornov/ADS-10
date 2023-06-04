@@ -30,7 +30,7 @@ class Tree {
  public:
     Node* root;
     int numberOfElements;
-    explicit Tree(std::vector<char> vector) {
+    explicit Tree(std::vector<char> vector) : numberOfElements(0) {
         root = addNode(root, vector);
     }
 
