@@ -10,6 +10,7 @@ std::vector<char> getPerm(const Tree& tree, int n) {
         return {};
     }
     std::vector<char> out;
-    out = tree.getPermutation(tree.root, n, tree.numberOfElements, std::vector<char> {});
+    out = tree.getPermutation(tree.root, n, tree.numberOfElements,
+                              std::vector<char> {});
     return out;
 }
