@@ -7,45 +7,44 @@
 
 struct Node {
     bool Root = false;
-    char value;
+    char ch;
     std::vector<Node*> pointers;
 };
 
 class Tree {
  private:
     Node* root;
-    std::vector<std::vector<char>> temp;
-    void searchPerms(Node* root, std::vector<char> vector) {
-        if (!root->Root)
-            vector.push_back(root->vlaue);
-        if (root->pointers.empty()) {
-            temp.push_back(vector);
-        } else {
-            for (Node* child : root->pointers) {
-                searchPerms(child, vector);
-            }
-        }
-    }
-    
-    void addNode(Node* root, const std::vector<char>& vector) {
-        for (char c : vector) {
+    std::vector<std::vector<char>> perms;
+    void insert(Node* root, const std::vector<char>& vec) {
+        for (char c : vec) {
             Node* tmp = new Node;
-            tmp->value = c;
+            tmp->ch = c;
             root->pointers.push_back(tmp);
-            std::vector<char> remainingChars(vector);
+            std::vector<char> remainingChars(vec);
             remainingChars.erase(std::find(remainingChars.begin(), \
                 remainingChars.end(), c));
-            addNode(tmp, remainingChars);
+            insert(tmp, remainingChars);
+        }
+    }
+    void findPerms(Node* root, std::vector<char> vec) {
+        if (!root->Root)
+            vec.push_back(root->ch);
+        if (root->pointers.empty()) {
+            perms.push_back(vec);
+        } else {
+            for (Node* child : root->pointers) {
+                findPerms(child, vec);
+            }
         }
     }
 
  public:
-    explicit Tree(const std::vector<char>& vector) {
+    explicit Tree(const std::vector<char>& vec) {
         root = new Node;
         root->Root = true;
-        addNode(root, vector);
+        insert(root, vec);
         std::vector<char> current;
-        searchPerms(root, current);
+        findPerms(root, current);
     }
     std::vector<std::vector<char>> getPermutations() const {
         return perms;
