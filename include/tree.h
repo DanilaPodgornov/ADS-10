@@ -1,14 +1,14 @@
-// Copyright 2022 NNTU-CS
-#ifndef INCLUDE_TREE_H_
-#define INCLUDE_TREE_H_
-#include <iostream>
-#include <vector>
+// Copyright 2022 NNTU-CS 
+#ifndef INCLUDE_TREE_H_ 
+#define INCLUDE_TREE_H_ 
+#include <iostream> 
+#include <vector> 
 class Tree {
  private:
     struct Node {
         char value;
-        std::vector<Node*> pointers {};
-        explicit Node(char value): value(value) {}
+        std::vector<Node*> pointers{};
+        explicit Node(char value) : value(value) {}
     };
 
     Node* addNode(Node* root, std::vector<char> vectorChar) {
@@ -42,15 +42,11 @@ class Tree {
         return result;
     }
 
-    std::vector<char> getPermutation(Node* node, int n,
-                                     int localNumberOfElements,
-                                     std::vector<char> vector) const {
+    std::vector<char> getPermutation(Node* node, int n, int localNumberOfElements, std::vector<char> vector) const {
         if (localNumberOfElements == 0) {
             return vector;
         }
-        Node* tempNode = node->pointers[(n - 1) / (Fact(localNumberOfElements)
-                                                   / localNumberOfElements)
-                                        % localNumberOfElements];
+        Node* tempNode = node->pointers[(n - 1) / (Fact(localNumberOfElements) / localNumberOfElements) % localNumberOfElements];
         vector.push_back(tempNode->value);
         int newNumber = localNumberOfElements - 1;
         return getPermutation(tempNode, n, newNumber, vector);
